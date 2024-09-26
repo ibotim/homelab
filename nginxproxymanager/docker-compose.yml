@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  nginxproxymanager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginxproxymanager
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "81:81"
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: ${DB_USER}       # Read from the .env file
+      DB_MYSQL_PASSWORD: ${DB_PASS}   # Read from the .env file
+      DB_MYSQL_NAME: "npm"
+    networks:
+      - frontend
+      - backend
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.5
+    container_name: npm_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}  # Read from the .env file
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    networks:
+      - backend
+    volumes:
+      - npm_db:/var/lib/mysql
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  npm_db:
