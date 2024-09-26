@@ -15,6 +15,9 @@ services:
       DB_MYSQL_USER: ${DB_USER}       # Read from the .env file
       DB_MYSQL_PASSWORD: ${DB_PASS}   # Read from the .env file
       DB_MYSQL_NAME: "npm"
+    volumes:
+      - ./data:/data 
+      - ./letsencrypt:/etc/letsencrypt
     networks:
       - frontend
       - backend
