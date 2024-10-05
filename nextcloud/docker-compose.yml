@@ -17,6 +17,8 @@ services:
       - nextcloud_backend   # Separate backend network for Nextcloud's database
     depends_on:
       - db
+    ports:
+      - 80
 
   db:
     image: mariadb:10.5
